@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Yap</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="login-card">
+        <h1 class="logo">YAP</h1>
+
+        <input type="text" id="username" placeholder="Username">
+        <input type="text" id="roomCode" placeholder="Room Code">
+
+        <button onclick="goToRoom()">Create</button>
+        <button onclick="goToRoom()">Join</button>
+    </div>
+
+    <script>
+        function goToRoom() {
+            const username = document.getElementById("username").value;
+            const room = document.getElementById("roomCode").value;
+
+            if (!username || !room) {
+                alert("Enter username and room code");
+                return;
+            }
+
+            window.location.href = `room.html?username=${username}&room=${room}`;
+        }
+    </script>
+
+</body>
+</html>
