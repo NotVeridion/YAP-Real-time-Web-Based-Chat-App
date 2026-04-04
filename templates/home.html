@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
-<form method="post ">
-    <h3>Enter the Chat Room</h3>
+<form method="post">
+    <h3>YAP LOGO</h3>
     <div>
         <label>Username:</label>
         <input type="text" placeholder="Enter username: " name="name" value="{{name}}"/>
     </div>
     <div class="join">
+        <label>Room Code:</label>
         <input type="text" placeholder="Enter roomcode" name="code" value="{{code}}"/>
         <button type="submit" name="join">Join a Room</button>
     </div>
