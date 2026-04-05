@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
-<form method="post">
-    <h3>YAP LOGO</h3>
-    <div>
-        <label>Username:</label>
-        <input type="text" placeholder="Enter username: " name="name" value="{{name}}"/>
+<form method="post" class="homeForm">
+    <h3 class="homeLogo">YAP LOGO</h3>
+    <div class="inputGroup">
+        <label class="inputLabel">Username:</label>
+        <input class="inputText" type="text" placeholder="Enter username: " name="name" value="{{name}}"/>
     </div>
-    <div class="join">
-        <label>Room Code:</label>
-        <input type="text" placeholder="Enter roomcode" name="code" value="{{code}}"/>
-        <button type="submit" name="join">Join a Room</button>
+
+    <div class="inputGroup">
+        <label class="inputLabel">Room Code:</label>
+        <input class="inputText" type="text" placeholder="Enter roomcode" name="code" value="{{code}}"/>
+        <button class="buttonJoin" type="submit" name="join">Join a Room</button>
     </div>
-    <button type="submit" name="create">Create a Room</button>
+    <button class="buttonCreate" type="submit" name="create">Create a Room</button>
 </form>
 {% endblock %}
