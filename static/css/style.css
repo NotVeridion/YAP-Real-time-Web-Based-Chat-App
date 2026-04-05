@@ -23,7 +23,7 @@ body {
 }
 
 /* main block section*/
-form {
+.homeForm {
     background-color: #d3d3d3;
     width: 360px;
     padding: 40px 30px;
@@ -33,57 +33,16 @@ form {
     gap: 20px;
 }
 
-/* replace with image of yap logo */
-h3 {
-    text-align: center;
-    font-size: 28px;
-    margin-bottom: 10px;
-}
-
-form div {
+/* text input */
+.inputGroup {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-/* the text inside the button */
-label {
-    font-size: 14px;
-    font-weight: bold;
-    color: #222;
-}
-
-/* the texts inside the text box, ex: enter room code */
-/* can delete or not to match the initial UI design but looks cool */
-input[type="text"] {
-    width: 100%;
-    padding: 10px 12px;
-    border: none;
-    border-radius: 4px;
-    background-color: white;
-    font-size: 14px;
-    outline: none;
-}
-
-/* button */
-button {
-    width: 100%;
-    padding: 10px 12px;
-    border: none;
-    border-radius: 20px;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-/* create button */
-button[name="create"] {
-    background-color: #9f9e9e;
-    margin-top: 15px;
-}
-
-/* join button */
-button[name="join"] {
-    background-color: #39ff14;
-    margin-top: 2px;
+/* replace with image of yap logo */
+.homeLogo {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 10px;
 }
