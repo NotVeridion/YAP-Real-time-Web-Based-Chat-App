@@ -126,3 +126,48 @@ body {
     width: 100%;
     height: 100%;
 }
+/* the labels */
+.inputLabel {
+    font-size: 16px;
+    font-weight: bold;
+    color: #222;
+}
+
+/* the text inputs in the msg box */
+.inputText {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    background-color: white;
+    font-size: 14px;
+    outline: none;
+}
+
+/* create button */
+.buttonCreate {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #bdbdbd;
+    color: #222;
+    margin-top: 6px;
+}
+
+/* join button */
+.buttonJoin {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #39ff14;
+    color: #222;
+    margin-top: 18px;
+}
