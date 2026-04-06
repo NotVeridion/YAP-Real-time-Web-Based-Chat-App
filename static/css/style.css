@@ -46,3 +46,83 @@ body {
     font-size: 28px;
     margin-bottom: 10px;
 }
+
+.room-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90vw;
+    min-height: 900px;
+    height: 80vw;
+    max-height: 100vh;
+    gap: 10px;
+}
+
+.room-container-left{
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 90% 10%;
+    justify-content: center;
+    align-items: center;
+    background-color: lightgrey;
+    border-radius: 30px;
+    width: 20vw;
+    height: 80vh;
+    padding: 20px;
+    gap: 10px;
+}
+
+.room-container-right{
+    background-color: lightgrey;
+    border-radius: 30px;
+    width: 50vw;
+    height: 80vh;
+    padding: 20px;
+}
+
+.user-list-box{
+    display: flex;
+    background-color: white;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    height: 100%;
+    scrollbar-color: black;
+    scrollbar-width: 10px;
+    overflow-x: hidden;
+}
+
+.user-item{
+    display: flex;
+    background-color: green;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+}
+
+.customize-box{
+    display: flex;
+    background-color: black;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.customize-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.chat-box{
+    display: flex;
+    background-color: white;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
