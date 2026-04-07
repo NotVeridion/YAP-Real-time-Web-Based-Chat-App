@@ -47,14 +47,25 @@ body {
     margin-bottom: 10px;
 }
 
-.room-container {
+.room-page-flexbox{
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 90vw;
+    height: 90vh;
+}
+
+.room-code-display{
+    height: 5%;
+}
+
+.room-flexbox {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 90vw;
-    min-height: 900px;
-    height: 80vw;
-    max-height: 100vh;
+    background-color: white ;
+    width: 100%;
+    height: 95%;
     gap: 10px;
 }
 
@@ -65,22 +76,24 @@ body {
     justify-content: center;
     align-items: center;
     background-color: lightgrey;
-    border-radius: 30px;
-    width: 20vw;
-    height: 80vh;
+    width: 20%;
+    height: 100%;
     padding: 20px;
     gap: 10px;
 }
 
-.room-container-right{
+.room-flexbox-right{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
     background-color: lightgrey;
-    border-radius: 30px;
-    width: 50vw;
-    height: 80vh;
+    width: 80%;
+    height: 100%;
     padding: 20px;
+    gap: 10px;
 }
 
-.user-list-box{
+.user-list{
     display: flex;
     background-color: white;
     justify-content: center;
@@ -92,6 +105,7 @@ body {
     overflow-x: hidden;
 }
 
+/* individual user item in the user list section */
 .user-item{
     display: flex;
     background-color: green;
@@ -101,6 +115,7 @@ body {
     height: 10%;
 }
 
+/* flexbox of customize button */
 .customize-box{
     display: flex;
     background-color: black;
@@ -118,14 +133,56 @@ body {
     height: 100%;
 }
 
+/* chat box containing messages */
 .chat-box{
     display: flex;
+    flex-direction: column;
     background-color: white;
+    align-items: flex-end;
+    width: 100%;
+    height: 90%;
+    padding: 10px;
+    gap: 10px;
+}
+
+/* individual message boxes in chat */
+.chat-item{
+    display:flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    height: 100%;
+    min-width: 50px;
+    width: fit-content;
+    max-width: 45%;
+    min-height: 50px;
+    height: fit-content;
+    overflow-wrap: break-word;
+    padding: 15px;
+    background-color: green;
 }
+
+/* flexbox for both input box and send button */
+.chat-input-flexbox{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 10%;
+    gap: 10px;
+}
+
+/* input box for messaging */
+.chat-input{
+    width: 90%;
+    border: none;
+    padding: 15px;
+    font-size: 15px;
+}
+
+/* send button for message */
+.chat-send-button{
+    min-width: 100px;
+    width: 10%;
+}
+
 /* the labels */
 .inputLabel {
     font-size: 16px;

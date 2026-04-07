@@ -1,14 +1,48 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class = "room-container">
-    <div class="room-container-left">
-        <div class = "user-list-box">
-            <div class = "user-item">user</div>
+<div class="room-page-flexbox">
+    <h2 class="room-code-display">Room Code: ABCD <!--Replace with {{code}} when back-end is integrated --></h2>
+    <div class="room-flexbox">
+        <div class="room-container-left">
+            <div class="user-list">
+                <div class="user-item">user</div>
+            </div>
+            <button class="customize-button"> Customize </button>
         </div>
-        <button class="customize-button"> Customize </button>
-    </div>
-    <div class ="room-container-right">
-        <div class = "chat-box"></div>
+        <div class="room-flexbox-right">
+            <div class="chat-box" id="chat-box"></div>
+            <div class="chat-input-flexbox">
+                <input class="chat-input" placeholder="Start YAPPING!" id="chat-input"/>
+                <button class="chat-send-button" onClick="sendMessage()">Send</button>
+            </div>
+        </div>
     </div>
 </div>
+
+<script>
+    const socket = io();
+
+    const input = document.getElementById("chat-input");
+
+    input.addEventListener("keydown", (event) => {
+        if (event.key === "Enter"){
+            sendMessage();
+        }
+    })
+
+    const sendMessage = () => {
+        const input = document.getElementById("chat-input");
+        const chatBox = document.getElementById("chat-box");
+        const message = input.value;
+        // Filler code to test html message box generation. 
+        // Will be moved when message is received through message event
+        if (message == "") return;
+        chatBox.innerHTML += `
+        <div class="chat-item">
+            ${message} 
+        </div>`;
+        //socket.emit("message", message); // Will use whenever room system through socketio is set up
+        input.value = "";
+    }
+</script>
 {% endblock %}
