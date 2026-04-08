@@ -70,6 +70,7 @@ body {
 }
 
 .room-container-left{
+    position: relative;
     display: grid;
     grid-template-columns: 100%;
     grid-template-rows: 90% 10%;
@@ -227,4 +228,32 @@ body {
     background-color: #39ff14;
     color: #222;
     margin-top: 18px;
+}
+
+/* panel sizing */
+.customize-panel {
+    display: none;
+    position: absolute;
+    bottom: 70px;
+    left: 20px;
+    width: calc(100% - 40px);
+    height: 180px;
+    background-color: white;
+    border: 1px solid gray;
+    padding: 10px;
+    z-index: 10;
+}
+
+/* color title centering */
+.customize-panel-title {
+    text-align: center;
+    font-size: 14px;
+}
+
+/* innerbody */
+.customize-panel-body {
+    width: 100%;
+    height: 120px;          
+    background-color: #e5e5e5;  
+    margin-top: 10px;
 }
