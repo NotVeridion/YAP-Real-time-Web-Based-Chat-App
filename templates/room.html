@@ -6,8 +6,15 @@
         <div class="room-container-left">
             <div class="user-list">
                 <div class="user-item">user</div>
+            </div>   
+
+            <div id="customize-panel" class="customize-panel">
+                <div class="customize-panel-title">Colors</div>
+                <div class="customize-panel-body">
+                    <!-- ill add color functionality later -->
+                </div>
             </div>
-            <button class="customize-button"> Customize </button>
+            <button class="customize-button" onclick="toggleCustomize()"> Customize </button>
         </div>
         <div class="room-flexbox-right">
             <div class="chat-box" id="chat-box"></div>
@@ -43,6 +50,17 @@
         </div>`;
         //socket.emit("message", message); // Will use whenever room system through socketio is set up
         input.value = "";
+    }
+
+    //for the customize button popup
+    function toggleCustomize() {
+        const panel = document.getElementById("customize-panel");
+
+        if (panel.style.display === "block") {
+            panel.style.display = "none";
+        } else {
+            panel.style.display = "block";
+        }
     }
 </script>
 {% endblock %}
