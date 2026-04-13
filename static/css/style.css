@@ -253,7 +253,45 @@ body {
 /* innerbody */
 .customize-panel-body {
     width: 100%;
-    height: 120px;          
-    background-color: #e5e5e5;  
+    min-height: 120px;
+    background-color: #e5e5e5;
     margin-top: 10px;
+    padding: 10px;
+
+    /* for the colors*/
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    justify-items: center;
+    align-items: center;
+
+    overflow: hidden;
 }
+
+
+/* this is for resizing the window */
+/* makes the color of 2 rows of 4 to 4 rows of 2 */
+@media (max-width: 700px) {
+    .customize-panel-body {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* the color button dimen */
+.color-option {
+    width: 100%;
+    max-width: 40px;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* color */
+.color-option:nth-child(1) { background-color: #6ee7e8; }
+.color-option:nth-child(2) { background-color: #6d28d9; }
+.color-option:nth-child(3) { background-color: #f2c94c; }
+.color-option:nth-child(4) { background-color: #d96aa7; }
+.color-option:nth-child(5) { background-color: #deff7d; }
+.color-option:nth-child(6) { background-color: #ff2b2b; }
+.color-option:nth-child(7) { background-color: #62f58a; }
+.color-option:nth-child(8) { background-color: #6ca8ff; }
