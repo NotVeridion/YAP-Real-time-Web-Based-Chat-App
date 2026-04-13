@@ -12,6 +12,15 @@
                 <div class="customize-panel-title">Colors</div>
                 <div class="customize-panel-body">
                     <!-- ill add color functionality later -->
+                    <div class="color-option" data-color="#6ee7e8"></div>
+                    <div class="color-option" data-color="#6d28d9"></div>
+                    <div class="color-option" data-color="#f2c94c"></div>
+                    <div class="color-option" data-color="#d96aa7"></div>
+
+                    <div class="color-option" data-color="#deff7d"></div>
+                    <div class="color-option" data-color="#ff2b2b"></div>
+                    <div class="color-option" data-color="#62f58a"></div>
+                    <div class="color-option" data-color="#6ca8ff"></div>
                 </div>
             </div>
             <button class="customize-button" onclick="toggleCustomize()"> Customize </button>
@@ -62,5 +71,15 @@
             panel.style.display = "block";
         }
     }
+
+    //for saving the selected color
+    //wll have to be tested
+    let currentUserColor = "#808080";
+    
+    document.querySelectorAll(".color-option").forEach(option => {
+        option.addEventListener("click", () => {
+            currentUserColor = option.dataset.color;
+        });
+    });
 </script>
 {% endblock %}
