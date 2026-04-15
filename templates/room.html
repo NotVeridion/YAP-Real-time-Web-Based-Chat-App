@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="room-page-flexbox">
-    <h2 class="room-code-display">Room Code: ABCD <!--Replace with {{code}} when back-end is integrated --></h2>
+<h2 class="room-code-display">Room Code: {{code}}</h2>
     <div class="room-flexbox">
         <div class="room-container-left">
             <div class="user-list">
@@ -58,6 +58,7 @@
             ${message} 
         </div>`;
         //socket.emit("message", message); // Will use whenever room system through socketio is set up
+        socket.emit("message", {data: message});
         input.value = "";
     }
 
