@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, redirect, url_for, session
-from flask_socketio import SocketIO, join_room, leave_room, send
+from flask_socketio import SocketIO, join_room, leave_room, send, emit
 import random
 import string
 
@@ -60,6 +60,9 @@ def on_connect():
         return
     join_room(room)
     rooms[room]["members"] += 1
+    # Send message history to the new joiner
+    emit("message_history", {"messages": rooms[room]["messages"]})
+    # Broadcast join notification to everyone in room
     send({"name": name, "message": "has entered the room"}, to=room)
 
 @socketio.on("disconnect")
@@ -81,7 +84,8 @@ def on_message(data):
         return
     content = {"name": name, "message": data["data"]}
     rooms[room]["messages"].append(content)
-    send(content, to=room)
+    # Broadcast message to ALL clients in the room
+    send(content, to=room, broadcast=True)
 
 if __name__ == "__main__":
     socketio.run(app, debug=True)

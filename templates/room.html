@@ -38,6 +38,28 @@
 <script>
     const socket = io();
 
+    // Server-to-client: receive and display incoming messages
+socket.on("message", (data) => {
+    const chatBox = document.getElementById("chat-box");
+    chatBox.innerHTML += `
+    <div class="chat-item">
+        <span class="chat-username">${data.name}:</span> ${data.message}
+    </div>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
+});
+
+// Server-to-client: receive message history on join
+socket.on("message_history", (data) => {
+    const chatBox = document.getElementById("chat-box");
+    data.messages.forEach((msg) => {
+        chatBox.innerHTML += `
+        <div class="chat-item">
+            <span class="chat-username">${msg.name}:</span> ${msg.message}
+        </div>`;
+    });
+    chatBox.scrollTop = chatBox.scrollHeight;
+});
+
     const input = document.getElementById("chat-input");
 
     input.addEventListener("keydown", (event) => {
