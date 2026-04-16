@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+<button class="disconnect-button" onclick="disconnect()">Disconnect</button>
 <div class="room-page-flexbox">
 <h2 class="room-code-display">Room Code: {{code}}</h2>
     <div class="room-flexbox">
@@ -116,5 +117,10 @@
             currentUserColor = option.dataset.color;
         });
     });
+
+    //going back to the home page
+    function disconnect() {
+    window.location.href = "/";
+}
 </script>
 {% endblock %}

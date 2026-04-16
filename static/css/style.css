@@ -53,6 +53,7 @@ body {
     justify-content: center;
     width: 90vw;
     height: 90vh;
+    position: relative;
 }
 
 .room-code-display{
@@ -297,3 +298,15 @@ body {
 .color-option:nth-child(6) { background-color: #ff2b2b; }
 .color-option:nth-child(7) { background-color: #62f58a; }
 .color-option:nth-child(8) { background-color: #6ca8ff; }
+
+.disconnect-button {
+    position: absolute;
+    top: 25px;
+    right: 62px;
+
+    padding: 10px 16px;
+    border: none;
+
+    background-color: #f83d3d;
+    color: white;
+}
