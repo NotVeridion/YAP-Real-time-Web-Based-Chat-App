@@ -4,7 +4,7 @@
 <h2 class="room-code-display">Room Code: {{code}}</h2>
     <div class="room-flexbox">
         <div class="room-container-left">
-            <div class="user-list">
+            <div class="user-list" id="user-list">
                 <div class="user-item">user</div>
             </div>   
 
@@ -39,7 +39,42 @@
     const socket = io();
     const CHATBOX_MESSAGE_LIMIT = 25;
     const chatBox = document.getElementById("chat-box");
+    const userList = document.getElementById("user-list");
     const input = document.getElementById("chat-input");
+    var users = [];
+
+    // Server-to-client: new user has joined
+    socket.on("user_connected", (data) => {
+        chatBox.innerHTML += `
+        <div class="chat-item">
+            <span class="chat-username">${data.name}:</span> joined the room
+        </div>`;
+
+        users = data.users;
+        
+        userList.innerHTML = "";
+        users.forEach((user) => {
+            userList.innerHTML += `<div class="user-item" id="${user}">${user}</div>`;
+        });
+    });
+
+    socket.on("user_disconnected", (data) => {
+        const index = users.indexOf(data.name)
+        if (index > -1){
+            users.splice(index, 1)
+        }
+
+        users.forEach((user) => {
+            userList.innerHTML += `<div class="user-item" id="${user}">${user}</div>`;
+        });
+
+        chatBox.innerHTML += `
+        <div class="chat-item">
+            <span class="chat-username">${data.name}:</span> has disconnected
+        </div>`;
+
+        console.log(users);
+    });
 
     // Server-to-client: receive and display incoming messages
     socket.on("message", (data) => {
@@ -74,7 +109,7 @@
         if (event.key === "Enter"){
             sendMessage();
         }
-    })
+    });
 
     const sendMessage = () => {
         const name = "{{name}}"
