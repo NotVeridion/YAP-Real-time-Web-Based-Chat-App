@@ -37,30 +37,38 @@
 
 <script>
     const socket = io();
+    const CHATBOX_MESSAGE_LIMIT = 25;
+    const chatBox = document.getElementById("chat-box");
+    const input = document.getElementById("chat-input");
 
     // Server-to-client: receive and display incoming messages
-socket.on("message", (data) => {
-    const chatBox = document.getElementById("chat-box");
-    chatBox.innerHTML += `
-    <div class="chat-item">
-        <span class="chat-username">${data.name}:</span> ${data.message}
-    </div>`;
-    chatBox.scrollTop = chatBox.scrollHeight;
-});
-
-// Server-to-client: receive message history on join
-socket.on("message_history", (data) => {
-    const chatBox = document.getElementById("chat-box");
-    data.messages.forEach((msg) => {
+    socket.on("message", (data) => {
         chatBox.innerHTML += `
         <div class="chat-item">
-            <span class="chat-username">${msg.name}:</span> ${msg.message}
+            <span class="chat-username">${data.name}:</span> ${data.message}
         </div>`;
-    });
-    chatBox.scrollTop = chatBox.scrollHeight;
-});
 
-    const input = document.getElementById("chat-input");
+        while (chatBox.children.length > CHATBOX_MESSAGE_LIMIT){
+            chatBox.removeChild(chatBox.firstChild)
+        }
+
+        chatBox.scrollTop = chatBox.scrollHeight;
+    });
+
+    // Server-to-client: receive message history on join
+    socket.on("message_history", (data) => {
+        data.messages.forEach((msg) => {
+            chatBox.innerHTML += `
+            <div class="chat-item">
+                <span class="chat-username">${msg.name}:</span> ${msg.message}
+            </div>`;
+
+            while (chatBox.children.length > CHATBOX_MESSAGE_LIMIT){
+                chatBox.removeChild(chatBox.firstChild)
+            }
+        });
+        chatBox.scrollTop = chatBox.scrollHeight;
+    });
 
     input.addEventListener("keydown", (event) => {
         if (event.key === "Enter"){
@@ -69,16 +77,20 @@ socket.on("message_history", (data) => {
     })
 
     const sendMessage = () => {
-        const input = document.getElementById("chat-input");
-        const chatBox = document.getElementById("chat-box");
+        const name = "{{name}}"
         const message = input.value;
         // Filler code to test html message box generation. 
         // Will be moved when message is received through message event
         if (message == "") return;
         chatBox.innerHTML += `
         <div class="chat-item">
-            ${message} 
+            <span class="chat-username">${name}:</span> ${message}
         </div>`;
+
+        while (chatBox.children.length > CHATBOX_MESSAGE_LIMIT){
+            chatBox.removeChild(chatBox.firstChild)
+        }
+
         //socket.emit("message", message); // Will use whenever room system through socketio is set up
         socket.emit("message", {data: message});
         input.value = "";

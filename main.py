@@ -3,6 +3,8 @@ from flask_socketio import SocketIO, join_room, leave_room, send, emit
 import random
 import string
 
+CHATBOX_MESSAGE_LIMIT = 25 # Message limit for chat box messages. If threshold is met, pops oldest message off.
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "secretkeyfornow"
 socketio = SocketIO(app)
@@ -83,9 +85,12 @@ def on_message(data):
     if room not in rooms:
         return
     content = {"name": name, "message": data["data"]}
+    if (len(rooms[room]["messages"]) >= CHATBOX_MESSAGE_LIMIT):
+        rooms[room]["messages"].pop()
+
     rooms[room]["messages"].append(content)
-    # Broadcast message to ALL clients in the room
-    send(content, to=room, broadcast=True)
+    # Only broadcasts message to other users in room, not self
+    send(content, to=room, broadcast=True, include_self=False)
 
 if __name__ == "__main__":
     socketio.run(app, debug=True)
