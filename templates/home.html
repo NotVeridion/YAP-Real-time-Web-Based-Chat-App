@@ -2,6 +2,7 @@
 {% block content %}
 <form method="post" class="homeForm">
     <h3 class="homeLogo">YAP LOGO</h3>
+    {% if error %}<p class="error-message">{{ error }}</p>{% endif %}
     <p id="error-message" class="error-message"></p>
     <div class="inputGroup">
         <label class="inputLabel">Username:</label>
@@ -33,21 +34,14 @@ document.querySelector(".homeForm").addEventListener("submit", function(e) {
         return;
     }
 
-    //no code
-    if (!code) {
+    const clickedButton = e.submitter;
+
+    // FIX: removed hardcoded "ABCD" check — server handles room validation
+    // only block client-side if joining with no code at all
+    if (clickedButton && clickedButton.name === "join" && !code) {
         e.preventDefault();
         error.textContent = "Please enter a room code";
         return;
-    }
-
-    const clickedButton = e.submitter;
-    // replace the code with real code; abcd place holder
-    if (clickedButton && clickedButton.name === "join") {
-        if (code !== "ABCD") {
-            e.preventDefault();
-            error.textContent = "Room not found.";
-            return;
-        }
     }
 });
 </script>

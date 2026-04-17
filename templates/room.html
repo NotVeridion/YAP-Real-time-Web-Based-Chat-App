@@ -113,19 +113,11 @@
 
     const sendMessage = () => {
         const message = input.value;
-        // Filler code to test html message box generation. 
-        // Will be moved when message is received through message event
         if (message == "") return;
-        chatBox.innerHTML += `
-        <div class="chat-item">
-            <span class="chat-username">${username}:</span> ${message}
-        </div>`;
 
-        while (chatBox.children.length > CHATBOX_MESSAGE_LIMIT){
-            chatBox.removeChild(chatBox.firstChild)
-        }
+        // FIX: removed local chatBox append here — server now sends to everyone
+        // including self, so the message event above handles display for all users
 
-        //socket.emit("message", message); // Will use whenever room system through socketio is set up
         socket.emit("message", {data: message});
         input.value = "";
     }
