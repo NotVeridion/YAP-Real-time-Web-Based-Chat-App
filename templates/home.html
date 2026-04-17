@@ -2,6 +2,7 @@
 {% block content %}
 <form method="post" class="homeForm">
     <h3 class="homeLogo">YAP LOGO</h3>
+    <p id="error-message" class="error-message"></p>
     <div class="inputGroup">
         <label class="inputLabel">Username:</label>
         <input class="inputText" type="text" placeholder="Enter username: " name="name" value="{{name}}"/>
@@ -14,4 +15,40 @@
     </div>
     <button class="buttonCreate" type="submit" name="create">Create a Room</button>
 </form>
+
+<script>
+    // for the error message
+document.querySelector(".homeForm").addEventListener("submit", function(e) {
+    const name = document.querySelector('input[name="name"]').value.trim();
+    const code = document.querySelector('input[name="code"]').value.trim();
+    const error = document.getElementById("error-message");
+
+    // clear previous error
+    error.textContent = "";
+
+    //no name
+    if (!name) {
+        e.preventDefault();
+        error.textContent = "Please enter a username";
+        return;
+    }
+
+    //no code
+    if (!code) {
+        e.preventDefault();
+        error.textContent = "Please enter a room code";
+        return;
+    }
+
+    const clickedButton = e.submitter;
+    // replace the code with real code; abcd place holder
+    if (clickedButton && clickedButton.name === "join") {
+        if (code !== "ABCD") {
+            e.preventDefault();
+            error.textContent = "Room not found.";
+            return;
+        }
+    }
+});
+</script>
 {% endblock %}
