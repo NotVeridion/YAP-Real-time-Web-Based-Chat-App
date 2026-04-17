@@ -44,7 +44,7 @@
     const input = document.getElementById("chat-input");
     var users = [];
 
-    // Server-to-client: new user has joined
+    // Server-to-client: New user has joined the room
     socket.on("user_connected", (data) => {
         chatBox.innerHTML += `
         <div class="chat-item">
@@ -59,12 +59,14 @@
         });
     });
 
+    // Server-to-client: A user has disconnected from the room
     socket.on("user_disconnected", (data) => {
         const index = users.indexOf(data.name)
         if (index > -1){
             users.splice(index, 1)
         }
 
+        userList.innerHTML = "";
         users.forEach((user) => {
             userList.innerHTML += `<div class="user-item" id="${user}">${user}</div>`;
         });
@@ -73,8 +75,6 @@
         <div class="chat-item">
             <span class="chat-username">${data.name}:</span> has disconnected
         </div>`;
-
-        console.log(users);
     });
 
     // Server-to-client: receive and display incoming messages
