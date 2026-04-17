@@ -38,7 +38,8 @@
 
 <script>
     const socket = io();
-    const username = "{{name}}"
+
+    const username = "{{ name }}"
     const CHATBOX_MESSAGE_LIMIT = 25;
     const chatBox = document.getElementById("chat-box");
     const userList = document.getElementById("user-list");
@@ -152,7 +153,12 @@
 
     //going back to the home page
     function disconnect() {
-    window.location.href = "/";
-}
+        window.location.href = "/";
+    }
+
+    if (window.history.replaceState) {
+        // This overwrites the current history entry
+        window.history.replaceState(null, null, window.location.href);
+    }
 </script>
 {% endblock %}
