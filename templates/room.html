@@ -5,7 +5,7 @@
 <h2 class="room-code-display">Room Code: {{code}}</h2>
     <div class="room-flexbox">
         <div class="room-container-left">
-            <div class="user-list">
+            <div class="user-list" id="user-list">
                 <div class="user-item">user</div>
             </div>   
 
@@ -38,9 +38,43 @@
 
 <script>
     const socket = io();
+
+    const username = "{{ name }}"
     const CHATBOX_MESSAGE_LIMIT = 25;
     const chatBox = document.getElementById("chat-box");
+    const userList = document.getElementById("user-list");
     const input = document.getElementById("chat-input");
+    var users = [];
+
+    // Server-to-client: New user has joined the room
+    socket.on("user_connected", (data) => {
+        chatBox.innerHTML += `
+        <div class="chat-item">
+            <span class="chat-username">${data.name}:</span> joined the room
+        </div>`;
+
+        users = data.users;
+        
+        userList.innerHTML = "";
+        users.forEach((user) => {
+            userList.innerHTML += `<div class="user-item" id="${user}">${user}</div>`;
+        });
+    });
+
+    // Server-to-client: A user has disconnected from the room
+    socket.on("user_disconnected", (data) => {
+        users = data.users;
+
+        userList.innerHTML = "";
+        users.forEach((user) => {
+            userList.innerHTML += `<div class="user-item" id="${user}">${user}</div>`;
+        });
+
+        chatBox.innerHTML += `
+        <div class="chat-item">
+            <span class="chat-username">${data.name}:</span> has disconnected
+        </div>`;
+    });
 
     // Server-to-client: receive and display incoming messages
     socket.on("message", (data) => {
@@ -75,17 +109,16 @@
         if (event.key === "Enter"){
             sendMessage();
         }
-    })
+    });
 
     const sendMessage = () => {
-        const name = "{{name}}"
         const message = input.value;
         // Filler code to test html message box generation. 
         // Will be moved when message is received through message event
         if (message == "") return;
         chatBox.innerHTML += `
         <div class="chat-item">
-            <span class="chat-username">${name}:</span> ${message}
+            <span class="chat-username">${username}:</span> ${message}
         </div>`;
 
         while (chatBox.children.length > CHATBOX_MESSAGE_LIMIT){
@@ -120,7 +153,12 @@
 
     //going back to the home page
     function disconnect() {
-    window.location.href = "/";
-}
+        window.location.href = "/";
+    }
+
+    if (window.history.replaceState) {
+        // This overwrites the current history entry
+        window.history.replaceState(null, null, window.location.href);
+    }
 </script>
 {% endblock %}

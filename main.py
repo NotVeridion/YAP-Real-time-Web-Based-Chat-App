@@ -36,7 +36,7 @@ def home():
 
         if "create" in request.form:
             code = generate_room_code()
-            rooms[code] = {"members": 0, "messages": []}
+            rooms[code] = {"users" : [], "members": 0, "messages": []}
 
         session["name"] = name
         session["room"] = code
@@ -60,12 +60,14 @@ def on_connect():
     room = session.get("room")
     if not name or not room:
         return
+    
     join_room(room)
     rooms[room]["members"] += 1
-    # Send message history to the new joiner
-    emit("message_history", {"messages": rooms[room]["messages"]})
-    # Broadcast join notification to everyone in room
-    send({"name": name, "message": "has entered the room"}, to=room)
+    rooms[room]["users"].append(name)
+    # Broadcast new user connection and send message history to the new user
+    # Had to change to emit rather than send to differentiate between normal messages and onConnect messages
+    emit("user_connected", {"name": name, "users": rooms[room]["users"]}, to=room) # Broadcasts with event
+    emit("message_history", {"messages": rooms[room]["messages"]}) # Sends only to new client
 
 @socketio.on("disconnect")
 def on_disconnect():
@@ -73,10 +75,11 @@ def on_disconnect():
     room = session.get("room")
     leave_room(room)
     if room in rooms:
+        rooms[room]["users"].remove(name)
         rooms[room]["members"] -= 1
         if rooms[room]["members"] <= 0:
             del rooms[room]
-    send({"name": name, "message": "has left the room"}, to=room)
+    emit("user_disconnected", {"name": name, "users": rooms[room]["users"]}, to=room)
 
 @socketio.on("message")
 def on_message(data):
