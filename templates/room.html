@@ -38,6 +38,7 @@
 
 <script>
     const socket = io();
+    const username = "{{name}}"
     const CHATBOX_MESSAGE_LIMIT = 25;
     const chatBox = document.getElementById("chat-box");
     const userList = document.getElementById("user-list");
@@ -61,10 +62,7 @@
 
     // Server-to-client: A user has disconnected from the room
     socket.on("user_disconnected", (data) => {
-        const index = users.indexOf(data.name)
-        if (index > -1){
-            users.splice(index, 1)
-        }
+        users = data.users;
 
         userList.innerHTML = "";
         users.forEach((user) => {
@@ -113,14 +111,13 @@
     });
 
     const sendMessage = () => {
-        const name = "{{name}}"
         const message = input.value;
         // Filler code to test html message box generation. 
         // Will be moved when message is received through message event
         if (message == "") return;
         chatBox.innerHTML += `
         <div class="chat-item">
-            <span class="chat-username">${name}:</span> ${message}
+            <span class="chat-username">${username}:</span> ${message}
         </div>`;
 
         while (chatBox.children.length > CHATBOX_MESSAGE_LIMIT){

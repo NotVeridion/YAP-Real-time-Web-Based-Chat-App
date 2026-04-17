@@ -60,6 +60,7 @@ def on_connect():
     room = session.get("room")
     if not name or not room:
         return
+    
     join_room(room)
     rooms[room]["members"] += 1
     rooms[room]["users"].append(name)
@@ -74,10 +75,11 @@ def on_disconnect():
     room = session.get("room")
     leave_room(room)
     if room in rooms:
+        rooms[room]["users"].remove(name)
         rooms[room]["members"] -= 1
         if rooms[room]["members"] <= 0:
             del rooms[room]
-    emit("user_disconnected", {"name": name, "message": "has left the room"}, to=room)
+    emit("user_disconnected", {"name": name, "users": rooms[room]["users"]}, to=room)
 
 @socketio.on("message")
 def on_message(data):
