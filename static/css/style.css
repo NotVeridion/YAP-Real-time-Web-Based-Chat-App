@@ -303,10 +303,13 @@ body {
     position: absolute;
     top: 25px;
     right: 62px;
-
+    /* this fixes the weird behavior */
+    z-index: 1000;
     padding: 10px 16px;
     border: none;
-
     background-color: #f83d3d;
     color: white;
+
+    /* to see if its actually on the box */
+    cursor: pointer;
 }
