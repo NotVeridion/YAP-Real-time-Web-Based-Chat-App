@@ -35,8 +35,11 @@ def home():
                 return render_template("home.html", error="Room not found.", code=code, name=name)
 
         if "create" in request.form:
-            code = generate_room_code()
-            rooms[code] = {"users" : [], "members": 0, "messages": []}
+            if code and code in rooms:
+                return render_template("home.html", error=f"Room code '{code}' is already taken. Choose a new one.", code=code, name=name)
+            if not code:
+                code = generate_room_code()
+            rooms[code] = {"users": [], "members": 0, "messages": []}
 
         session["name"] = name
         session["room"] = code
@@ -75,10 +78,12 @@ def on_disconnect():
     room = session.get("room")
     leave_room(room)
     if room in rooms:
-        rooms[room]["users"].remove(name)
+        if name in rooms[room]["users"]:
+            rooms[room]["users"].remove(name)
         rooms[room]["members"] -= 1
         if rooms[room]["members"] <= 0:
             del rooms[room]
+            return  # FIX: room deleted, stop here to avoid crash on emit below
     emit("user_disconnected", {"name": name, "users": rooms[room]["users"]}, to=room)
 
 @socketio.on("message")
@@ -89,11 +94,10 @@ def on_message(data):
         return
     content = {"name": name, "message": data["data"]}
     if (len(rooms[room]["messages"]) >= CHATBOX_MESSAGE_LIMIT):
-        rooms[room]["messages"].pop()
+        rooms[room]["messages"].pop(0)  # FIX: pop(0) removes oldest, not newest
 
     rooms[room]["messages"].append(content)
-    # Only broadcasts message to other users in room, not self
-    send(content, to=room, broadcast=True, include_self=False)
+    send(content, to=room)  # FIX: send to all including self; room.html handles display for sender
 
 if __name__ == "__main__":
     socketio.run(app, debug=True)
