@@ -34,17 +34,6 @@
     </div>
 </div>
 
-<style>
-    .chat-item-system {
-        display: flex;
-        justify-content: center;
-        text-align: center;
-        margin: 4px 8px;
-        opacity: 0.7;
-        font-style: italic;
-    }
-</style>
-
 <script>
     const socket = io();
 
@@ -59,13 +48,8 @@
     // Server-to-client: New user has joined the room
     socket.on("user_connected", (data) => {
         chatBox.innerHTML += `
-<<<<<<< HEAD
         <div class="chat-system-notice">
             ${data.name} joined the room
-=======
-        <div class="chat-item chat-item-system">
-            <span class="chat-username">${data.name}:</span>&nbsp;joined the room
->>>>>>> dev
         </div>`;
 
         users = data.users;
@@ -89,13 +73,8 @@
         });
 
         chatBox.innerHTML += `
-<<<<<<< HEAD
         <div class="chat-system-notice">
             ${data.name} has disconnected
-=======
-        <div class="chat-item chat-item-system">
-            <span class="chat-username">${data.name}:</span>&nbsp;has disconnected
->>>>>>> dev
         </div>`;
     });
 
@@ -105,12 +84,8 @@
         chatBox.innerHTML += `
         <div style="width:100%; display:flex; justify-content:${isMe ? 'flex-end' : 'flex-start'};">
             <div class="chat-item" name="${data.name}" style="background: ${userColorMap[data.name]};">
-<<<<<<< HEAD
                 <div class="chat-username">${data.name}</div>
                 <div class="chat-message">${data.message}</div>
-=======
-                <span class="chat-username">${data.name}:</span>&nbsp;${data.message}
->>>>>>> dev
             </div>
         </div>`;
 
@@ -128,12 +103,8 @@
             chatBox.innerHTML += `
             <div style="width:100%; display:flex; justify-content:${isMe ? 'flex-end' : 'flex-start'};">
                 <div class="chat-item" name="${msg.name}" style="background: ${userColorMap[msg.name]};">
-<<<<<<< HEAD
                     <div class="chat-username">${msg.name}</div>
                     <div class="chat-message">${msg.message}</div>
-=======
-                    <span class="chat-username">${msg.name}:</span>&nbsp;${msg.message}
->>>>>>> dev
                 </div>
             </div>`;
 
