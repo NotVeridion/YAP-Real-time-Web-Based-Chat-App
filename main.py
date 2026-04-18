@@ -39,7 +39,7 @@ def home():
                 return render_template("home.html", error=f"Room code '{code}' is already taken. Choose a new one.", code=code, name=name)
             if not code:
                 code = generate_room_code()
-            rooms[code] = {"users": [], "members": 0, "messages": []}
+            rooms[code] = {"users": [], "members": 0, "messages": [], "userColorMap": {}}
 
         session["name"] = name
         session["room"] = code
@@ -67,9 +67,10 @@ def on_connect():
     join_room(room)
     rooms[room]["members"] += 1
     rooms[room]["users"].append(name)
+    rooms[room]["userColorMap"][name] = "#6ca8ff"
     # Broadcast new user connection and send message history to the new user
     # Had to change to emit rather than send to differentiate between normal messages and onConnect messages
-    emit("user_connected", {"name": name, "users": rooms[room]["users"]}, to=room) # Broadcasts with event
+    emit("user_connected", {"name": name, "users": rooms[room]["users"], "userColorMap": rooms[room]["userColorMap"]}, to=room) # Broadcasts with event
     emit("message_history", {"messages": rooms[room]["messages"]}) # Sends only to new client
 
 @socketio.on("disconnect")
@@ -80,11 +81,12 @@ def on_disconnect():
     if room in rooms:
         if name in rooms[room]["users"]:
             rooms[room]["users"].remove(name)
+            rooms[room]["userColorMap"].pop(name)
         rooms[room]["members"] -= 1
         if rooms[room]["members"] <= 0:
             del rooms[room]
             return  # FIX: room deleted, stop here to avoid crash on emit below
-    emit("user_disconnected", {"name": name, "users": rooms[room]["users"]}, to=room)
+    emit("user_disconnected", {"name": name, "users": rooms[room]["users"], "userColorMap": rooms[room]["userColorMap"]}, to=room)
 
 @socketio.on("message")
 def on_message(data):
@@ -98,6 +100,16 @@ def on_message(data):
 
     rooms[room]["messages"].append(content)
     send(content, to=room)  # FIX: send to all including self; room.html handles display for sender
+
+@socketio.on("color_change")
+def color_change(data):
+    room = session.get("room")
+
+    name = data["name"]
+    color = data["color"]
+    rooms[room]["userColorMap"][name] = color
+
+    emit("color_change", {"name": name, "color": color}, to=room)
 
 if __name__ == "__main__":
     socketio.run(app, debug=True)
