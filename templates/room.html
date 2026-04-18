@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+{% block content %}
+<button class="disconnect-button" onclick="disconnect()">Disconnect</button>
+<div class="room-page-flexbox">
+<h2 class="room-code-display">Room Code: {{code}}</h2>
+    <div class="room-flexbox">
+        <div class="room-container-left">
+            <div class="user-list" id="user-list">
+            </div>   
+
+            <div id="customize-panel" class="customize-panel">
+                <div class="customize-panel-title">Colors</div>
+                <div class="customize-panel-body">
+                    <button class="color-option" onClick="sendColor(this)" data-color="#6ee7e8"></button>
+                    <button class="color-option" onClick="sendColor(this)" data-color="#6d28d9"></button>
+                    <button class="color-option" onClick="sendColor(this)" data-color="#f2c94c"></button>
+                    <button class="color-option" onClick="sendColor(this)" data-color="#d96aa7"></button>
+
+                    <button class="color-option" onClick="sendColor(this)" data-color="#deff7d"></button>
+                    <button class="color-option" onClick="sendColor(this)" data-color="#ff2b2b"></button>
+                    <button class="color-option" onClick="sendColor(this)" data-color="#62f58a"></button>
+                    <button class="color-option" onClick="sendColor(this)" data-color="#6ca8ff"></button>
+                </div>
+            </div>
+            <button class="customize-button" onclick="toggleCustomize()"> Customize </button>
+        </div>
+        <div class="room-flexbox-right">
+            <div class="chat-box" id="chat-box"></div>
+            <div class="chat-input-flexbox">
+                <input class="chat-input" placeholder="Start YAPPING!" id="chat-input"/>
+                <button class="chat-send-button" onClick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const socket = io();
+
+    const username = "{{ name }}"
+    const CHATBOX_MESSAGE_LIMIT = 25;
+    const chatBox = document.getElementById("chat-box");
+    const userList = document.getElementById("user-list");
+    const input = document.getElementById("chat-input");
+    var users = [];
+    var userColorMap = {};
+
+    // Server-to-client: New user has joined the room
+    socket.on("user_connected", (data) => {
+        chatBox.innerHTML += `
+        <div class="chat-system-notice">
+            ${data.name} joined the room
+        </div>`;
+
+        users = data.users;
+        userColorMap = data.userColorMap;
+        userColorMap[data.name] = "#6ca8ff";
+        
+        userList.innerHTML = "";
+        users.forEach((user) => {
+            userList.innerHTML += `<div class="user-item" name="${user}" style="background: ${userColorMap[user]};">${user}</div>`;
+        });
+    });
+
+    // Server-to-client: A user has disconnected from the room
+    socket.on("user_disconnected", (data) => {
+        users = data.users;
+        userColorMap = data.userColorMap;
+
+        userList.innerHTML = "";
+        users.forEach((user) => {
+            userList.innerHTML += `<div class="user-item" name="${user}">${user}</div>`;
+        });
+
+        chatBox.innerHTML += `
+        <div class="chat-system-notice">
+            ${data.name} has disconnected
+        </div>`;
+    });
+
+    // Server-to-client: receive and display incoming messages
+    socket.on("message", (data) => {
+        const isMe = data.name === username;
+        chatBox.innerHTML += `
+        <div style="width:100%; display:flex; justify-content:${isMe ? 'flex-end' : 'flex-start'};">
+            <div class="chat-item" name="${data.name}" style="background: ${userColorMap[data.name]};">
+                <div class="chat-username">${data.name}</div>
+                <div class="chat-message">${data.message}</div>
+            </div>
+        </div>`;
+
+        while (chatBox.children.length > CHATBOX_MESSAGE_LIMIT){
+            chatBox.removeChild(chatBox.firstChild)
+        }
+
+        chatBox.scrollTop = chatBox.scrollHeight;
+    });
+
+    // Server-to-client: receive message history on join
+    socket.on("message_history", (data) => {
+        data.messages.forEach((msg) => {
+            const isMe = msg.name === username;
+            chatBox.innerHTML += `
+            <div style="width:100%; display:flex; justify-content:${isMe ? 'flex-end' : 'flex-start'};">
+                <div class="chat-item" name="${msg.name}" style="background: ${userColorMap[msg.name]};">
+                    <div class="chat-username">${msg.name}</div>
+                    <div class="chat-message">${msg.message}</div>
+                </div>
+            </div>`;
+
+            while (chatBox.children.length > CHATBOX_MESSAGE_LIMIT){
+                chatBox.removeChild(chatBox.firstChild)
+            }
+        });
+
+        chatBox.scrollTop = chatBox.scrollHeight;
+    });
+
+    // Color change sent by a user
+    socket.on("color_change", (data) => {
+        const name = data.name;
+        userColorMap[name] = data.color;
+
+        const userItems = document.getElementsByName(name);
+        for (const child of userItems){
+            child.style.background = data.color;
+        }
+    });
+
+    input.addEventListener("keydown", (event) => {
+        if (event.key === "Enter"){
+            sendMessage();
+        }
+    });
+
+    const sendMessage = () => {
+        const message = input.value;
+        if (message == "") return;
+
+        socket.emit("message", {data: message});
+        input.value = "";
+    }
+
+    const sendColor = (btn) => {
+        const color = btn.dataset.color;
+        socket.emit("color_change", {"name": username, "color": color})
+    }
+
+    function toggleCustomize() {
+        const panel = document.getElementById("customize-panel");
+        if (panel.style.display === "block") {
+            panel.style.display = "none";
+        } else {
+            panel.style.display = "block";
+        }
+    }
+
+    let currentUserColor = "#808080";
+    
+    document.querySelectorAll(".color-option").forEach(option => {
+        option.addEventListener("click", () => {
+            currentUserColor = option.dataset.color;
+        });
+    });
+
+    function disconnect() {
+        window.location.href = "/";
+    }
+
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+</script>
+{% endblock %}

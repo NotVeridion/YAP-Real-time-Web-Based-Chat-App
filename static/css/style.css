@@ -1,0 +1,344 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* styling and center for the page*/
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f3f3f3;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.content {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* main block section*/
+.homeForm {
+    background-color: #d3d3d3;
+    width: 360px;
+    padding: 40px 30px;
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* text input */
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* replace with image of yap logo */
+.homeLogo {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.room-page-flexbox{
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 90vw;
+    height: 90vh;
+    position: relative;
+}
+
+.room-code-display{
+    height: 5%;
+}
+
+.room-flexbox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    width: 100%;
+    height: 95%;
+    gap: 10px;
+}
+
+.room-container-left{
+    position: relative;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 90% 10%;
+    justify-content: center;
+    align-items: center;
+    background-color: lightgrey;
+    width: 20%;
+    height: 100%;
+    padding: 20px;
+    gap: 10px;
+}
+
+.room-flexbox-right{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    background-color: lightgrey;
+    width: 80%;
+    height: 100%;
+    padding: 20px;
+    gap: 10px;
+}
+
+.user-list{
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    height: 100%;
+    scrollbar-color: black;
+    scrollbar-width: 10px;
+    overflow-x: hidden;
+}
+
+/* individual user item in the user list section */
+.user-item{
+    display: flex;
+    background-color: green;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+}
+
+/* flexbox of customize button */
+.customize-box{
+    display: flex;
+    background-color: black;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.customize-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* chat box containing messages */
+.chat-box{
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    align-items: flex-end;
+    overflow: scroll;
+    overflow-x: hidden;
+    width: 100%;
+    height: 90%;
+    padding: 10px;
+    gap: 10px;
+}
+
+/* individual message boxes in chat */
+.chat-item{
+    min-width: 50px;
+    width: fit-content;
+    max-width: 70%;
+    height: fit-content;
+    overflow-wrap: break-word;
+    padding: 10px 15px;
+    background-color: green;
+    border-radius: 18px;        /* rounded bubbles */
+    display: flex;
+    flex-direction: column;     /* username on top, message below */
+    gap: 4px;
+}
+
+/* username displayed above message */
+.chat-username {
+    font-size: 11px;
+    font-weight: bold;
+    opacity: 0.75;
+}
+
+/* message text */
+.chat-message {
+    font-size: 14px;
+}
+
+/* system notices (join/leave) - centered and elongated */
+.chat-system-notice {
+    width: 60%;
+    text-align: center;
+    align-self: center;
+    padding: 8px 20px;
+    font-style: italic;
+    font-size: 13px;
+    opacity: 0.6;
+    background-color: #e0e0e0;
+    border-radius: 20px;
+}
+
+/* flexbox for both input box and send button */
+.chat-input-flexbox{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 10%;
+    gap: 10px;
+}
+
+/* input box for messaging */
+.chat-input{
+    width: 90%;
+    border: none;
+    padding: 15px;
+    font-size: 15px;
+}
+
+/* send button for message */
+.chat-send-button{
+    min-width: 100px;
+    width: 10%;
+}
+
+/* the labels */
+.inputLabel {
+    font-size: 16px;
+    font-weight: bold;
+    color: #222;
+}
+
+/* the text inputs in the msg box */
+.inputText {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    background-color: white;
+    font-size: 14px;
+    outline: none;
+}
+
+/* create button */
+.buttonCreate {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #bdbdbd;
+    color: #222;
+    margin-top: 6px;
+}
+
+/* join button */
+.buttonJoin {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #39ff14;
+    color: #222;
+    margin-top: 18px;
+}
+
+/* panel sizing */
+.customize-panel {
+    display: none;
+    position: absolute;
+    bottom: 70px;
+    left: 20px;
+    width: calc(100% - 40px);
+    height: 180px;
+    background-color: white;
+    border: 1px solid gray;
+    padding: 10px;
+    z-index: 10;
+}
+
+/* color title centering */
+.customize-panel-title {
+    text-align: center;
+    font-size: 14px;
+}
+
+/* innerbody */
+.customize-panel-body {
+    width: 100%;
+    min-height: 120px;
+    background-color: #e5e5e5;
+    margin-top: 10px;
+    padding: 10px;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    justify-items: center;
+    align-items: center;
+
+    overflow: hidden;
+}
+
+@media (max-width: 700px) {
+    .customize-panel-body {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* the color button dimen */
+.color-option {
+    width: 100%;
+    max-width: 40px;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+}
+
+/* color */
+.color-option:nth-child(1) { background-color: #6ee7e8; }
+.color-option:nth-child(2) { background-color: #6d28d9; }
+.color-option:nth-child(3) { background-color: #f2c94c; }
+.color-option:nth-child(4) { background-color: #d96aa7; }
+.color-option:nth-child(5) { background-color: #deff7d; }
+.color-option:nth-child(6) { background-color: #ff2b2b; }
+.color-option:nth-child(7) { background-color: #62f58a; }
+.color-option:nth-child(8) { background-color: #6ca8ff; }
+
+.disconnect-button {
+    position: absolute;
+    top: 25px;
+    right: 62px;
+    z-index: 1000;
+    padding: 10px 16px;
+    border: none;
+    background-color: #f83d3d;
+    color: white;
+    cursor: pointer;
+}
+
+/* error msg */
+.error-message {
+    color: red;
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 10px;
+    padding: 8px;
+}
