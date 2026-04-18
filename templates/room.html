@@ -11,7 +11,6 @@
             <div id="customize-panel" class="customize-panel">
                 <div class="customize-panel-title">Colors</div>
                 <div class="customize-panel-body">
-                    <!-- ill add color functionality later -->
                     <button class="color-option" onClick="sendColor(this)" data-color="#6ee7e8"></button>
                     <button class="color-option" onClick="sendColor(this)" data-color="#6d28d9"></button>
                     <button class="color-option" onClick="sendColor(this)" data-color="#f2c94c"></button>
@@ -49,13 +48,13 @@
     // Server-to-client: New user has joined the room
     socket.on("user_connected", (data) => {
         chatBox.innerHTML += `
-        <div class="chat-item">
-            <span class="chat-username">${data.name}:</span> joined the room
+        <div class="chat-system-notice">
+            ${data.name} joined the room
         </div>`;
 
         users = data.users;
         userColorMap = data.userColorMap;
-        userColorMap[data.name] = "#6ca8ff"; // Initial color is one of the colors in the table
+        userColorMap[data.name] = "#6ca8ff";
         
         userList.innerHTML = "";
         users.forEach((user) => {
@@ -72,20 +71,22 @@
         users.forEach((user) => {
             userList.innerHTML += `<div class="user-item" name="${user}">${user}</div>`;
         });
-        
 
         chatBox.innerHTML += `
-        <div class="chat-item">
-            <span class="chat-username">${data.name}:</span> has disconnected
+        <div class="chat-system-notice">
+            ${data.name} has disconnected
         </div>`;
     });
 
     // Server-to-client: receive and display incoming messages
     socket.on("message", (data) => {
-        console.log(userColorMap[data.name])
+        const isMe = data.name === username;
         chatBox.innerHTML += `
-        <div class="chat-item" name="${data.name}" style="background: ${userColorMap[data.name]};">
-            <span class="chat-username">${data.name}:</span> ${data.message}
+        <div style="width:100%; display:flex; justify-content:${isMe ? 'flex-end' : 'flex-start'};">
+            <div class="chat-item" name="${data.name}" style="background: ${userColorMap[data.name]};">
+                <div class="chat-username">${data.name}</div>
+                <div class="chat-message">${data.message}</div>
+            </div>
         </div>`;
 
         while (chatBox.children.length > CHATBOX_MESSAGE_LIMIT){
@@ -97,11 +98,14 @@
 
     // Server-to-client: receive message history on join
     socket.on("message_history", (data) => {
-        console.log("in message history event");
         data.messages.forEach((msg) => {
+            const isMe = msg.name === username;
             chatBox.innerHTML += `
-            <div class="chat-item" name="${msg.name}" style="background: ${userColorMap[msg.name]};}">
-                <span class="chat-username">${msg.name}:</span> ${msg.message}
+            <div style="width:100%; display:flex; justify-content:${isMe ? 'flex-end' : 'flex-start'};">
+                <div class="chat-item" name="${msg.name}" style="background: ${userColorMap[msg.name]};">
+                    <div class="chat-username">${msg.name}</div>
+                    <div class="chat-message">${msg.message}</div>
+                </div>
             </div>`;
 
             while (chatBox.children.length > CHATBOX_MESSAGE_LIMIT){
@@ -133,9 +137,6 @@
         const message = input.value;
         if (message == "") return;
 
-        // FIX: removed local chatBox append here — server now sends to everyone
-        // including self, so the message event above handles display for all users
-
         socket.emit("message", {data: message});
         input.value = "";
     }
@@ -145,10 +146,8 @@
         socket.emit("color_change", {"name": username, "color": color})
     }
 
-    //for the customize button popup
     function toggleCustomize() {
         const panel = document.getElementById("customize-panel");
-
         if (panel.style.display === "block") {
             panel.style.display = "none";
         } else {
@@ -156,8 +155,6 @@
         }
     }
 
-    //for saving the selected color
-    //wll have to be tested
     let currentUserColor = "#808080";
     
     document.querySelectorAll(".color-option").forEach(option => {
@@ -166,13 +163,11 @@
         });
     });
 
-    //going back to the home page
     function disconnect() {
         window.location.href = "/";
     }
 
     if (window.history.replaceState) {
-        // This overwrites the current history entry
         window.history.replaceState(null, null, window.location.href);
     }
 </script>

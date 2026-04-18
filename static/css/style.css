@@ -64,7 +64,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: white ;
+    background-color: white;
     width: 100%;
     height: 95%;
     gap: 10px;
@@ -152,17 +152,42 @@ body {
 
 /* individual message boxes in chat */
 .chat-item{
-    display:flex;
-    justify-content: center;
-    align-items: center;
     min-width: 50px;
     width: fit-content;
-    max-width: 45%;
-    min-height: 50px;
+    max-width: 70%;
     height: fit-content;
     overflow-wrap: break-word;
-    padding: 15px;
+    padding: 10px 15px;
     background-color: green;
+    border-radius: 18px;        /* rounded bubbles */
+    display: flex;
+    flex-direction: column;     /* username on top, message below */
+    gap: 4px;
+}
+
+/* username displayed above message */
+.chat-username {
+    font-size: 11px;
+    font-weight: bold;
+    opacity: 0.75;
+}
+
+/* message text */
+.chat-message {
+    font-size: 14px;
+}
+
+/* system notices (join/leave) - centered and elongated */
+.chat-system-notice {
+    width: 60%;
+    text-align: center;
+    align-self: center;
+    padding: 8px 20px;
+    font-style: italic;
+    font-size: 13px;
+    opacity: 0.6;
+    background-color: #e0e0e0;
+    border-radius: 20px;
 }
 
 /* flexbox for both input box and send button */
@@ -262,7 +287,6 @@ body {
     margin-top: 10px;
     padding: 10px;
 
-    /* for the colors*/
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 12px;
@@ -272,9 +296,6 @@ body {
     overflow: hidden;
 }
 
-
-/* this is for resizing the window */
-/* makes the color of 2 rows of 4 to 4 rows of 2 */
 @media (max-width: 700px) {
     .customize-panel-body {
         grid-template-columns: repeat(2, 1fr);
@@ -288,6 +309,7 @@ body {
     aspect-ratio: 1 / 1;
     border-radius: 50%;
     cursor: pointer;
+    border: none;
 }
 
 /* color */
@@ -304,14 +326,11 @@ body {
     position: absolute;
     top: 25px;
     right: 62px;
-    /* this fixes the weird behavior */
     z-index: 1000;
     padding: 10px 16px;
     border: none;
     background-color: #f83d3d;
     color: white;
-
-    /* to see if its actually on the box */
     cursor: pointer;
 }
 
