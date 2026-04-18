@@ -36,6 +36,31 @@
     </div>
 </div>
 
+<style>
+    .chat-item-me {
+        display: flex;
+        justify-content: flex-end;
+        text-align: right;
+        margin: 4px 8px;
+    }
+
+    .chat-item-other {
+        display: flex;
+        justify-content: flex-start;
+        text-align: left;
+        margin: 4px 8px;
+    }
+
+    .chat-item-system {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        margin: 4px 8px;
+        opacity: 0.7;
+        font-style: italic;
+    }
+</style>
+
 <script>
     const socket = io();
 
@@ -49,8 +74,8 @@
     // Server-to-client: New user has joined the room
     socket.on("user_connected", (data) => {
         chatBox.innerHTML += `
-        <div class="chat-item">
-            <span class="chat-username">${data.name}:</span> joined the room
+        <div class="chat-item chat-item-system">
+            <span class="chat-username">${data.name}:</span>&nbsp;joined the room
         </div>`;
 
         users = data.users;
@@ -71,16 +96,19 @@
         });
 
         chatBox.innerHTML += `
-        <div class="chat-item">
-            <span class="chat-username">${data.name}:</span> has disconnected
+        <div class="chat-item chat-item-system">
+            <span class="chat-username">${data.name}:</span>&nbsp;has disconnected
         </div>`;
     });
 
     // Server-to-client: receive and display incoming messages
     socket.on("message", (data) => {
+        const isMe = data.name === username;
         chatBox.innerHTML += `
-        <div class="chat-item">
-            <span class="chat-username">${data.name}:</span> ${data.message}
+        <div style="width:100%; display:flex; justify-content:${isMe ? 'flex-end' : 'flex-start'};">
+            <div class="chat-item">
+                <span class="chat-username">${data.name}:</span>&nbsp;${data.message}
+            </div>
         </div>`;
 
         while (chatBox.children.length > CHATBOX_MESSAGE_LIMIT){
@@ -93,9 +121,12 @@
     // Server-to-client: receive message history on join
     socket.on("message_history", (data) => {
         data.messages.forEach((msg) => {
+            const isMe = msg.name === username;
             chatBox.innerHTML += `
-            <div class="chat-item">
-                <span class="chat-username">${msg.name}:</span> ${msg.message}
+            <div style="width:100%; display:flex; justify-content:${isMe ? 'flex-end' : 'flex-start'};">
+                <div class="chat-item">
+                    <span class="chat-username">${msg.name}:</span>&nbsp;${msg.message}
+                </div>
             </div>`;
 
             while (chatBox.children.length > CHATBOX_MESSAGE_LIMIT){

@@ -152,12 +152,10 @@ body {
 
 /* individual message boxes in chat */
 .chat-item{
-    display:flex;
-    justify-content: center;
     align-items: center;
     min-width: 50px;
     width: fit-content;
-    max-width: 45%;
+    max-width: 70%;       /* change from 45% to 70% */
     min-height: 50px;
     height: fit-content;
     overflow-wrap: break-word;
@@ -165,6 +163,29 @@ body {
     background-color: green;
 }
 
+
+.chat-box{
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    align-items: stretch;  /* change flex-end to stretch */
+    overflow: scroll;
+    overflow-x: hidden;
+    width: 100%;
+    height: 90%;
+    padding: 10px;
+    gap: 10px;
+}
+
+.chat-item-me {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.chat-item-other {
+    margin-right: auto;
+    margin-left: 0;
+}
 /* flexbox for both input box and send button */
 .chat-input-flexbox{
     display: flex;
