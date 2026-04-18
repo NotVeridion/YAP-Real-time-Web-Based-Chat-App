@@ -6,22 +6,21 @@
     <div class="room-flexbox">
         <div class="room-container-left">
             <div class="user-list" id="user-list">
-                <div class="user-item">user</div>
             </div>   
 
             <div id="customize-panel" class="customize-panel">
                 <div class="customize-panel-title">Colors</div>
                 <div class="customize-panel-body">
                     <!-- ill add color functionality later -->
-                    <div class="color-option" data-color="#6ee7e8"></div>
-                    <div class="color-option" data-color="#6d28d9"></div>
-                    <div class="color-option" data-color="#f2c94c"></div>
-                    <div class="color-option" data-color="#d96aa7"></div>
+                    <button class="color-option" onClick="sendColor(this)" data-color="#6ee7e8"></button>
+                    <button class="color-option" onClick="sendColor(this)" data-color="#6d28d9"></button>
+                    <button class="color-option" onClick="sendColor(this)" data-color="#f2c94c"></button>
+                    <button class="color-option" onClick="sendColor(this)" data-color="#d96aa7"></button>
 
-                    <div class="color-option" data-color="#deff7d"></div>
-                    <div class="color-option" data-color="#ff2b2b"></div>
-                    <div class="color-option" data-color="#62f58a"></div>
-                    <div class="color-option" data-color="#6ca8ff"></div>
+                    <button class="color-option" onClick="sendColor(this)" data-color="#deff7d"></button>
+                    <button class="color-option" onClick="sendColor(this)" data-color="#ff2b2b"></button>
+                    <button class="color-option" onClick="sendColor(this)" data-color="#62f58a"></button>
+                    <button class="color-option" onClick="sendColor(this)" data-color="#6ca8ff"></button>
                 </div>
             </div>
             <button class="customize-button" onclick="toggleCustomize()"> Customize </button>
@@ -45,6 +44,7 @@
     const userList = document.getElementById("user-list");
     const input = document.getElementById("chat-input");
     var users = [];
+    var userColorMap = {};
 
     // Server-to-client: New user has joined the room
     socket.on("user_connected", (data) => {
@@ -54,21 +54,25 @@
         </div>`;
 
         users = data.users;
+        userColorMap = data.userColorMap;
+        userColorMap[data.name] = "#6ca8ff"; // Initial color is one of the colors in the table
         
         userList.innerHTML = "";
         users.forEach((user) => {
-            userList.innerHTML += `<div class="user-item" id="${user}">${user}</div>`;
+            userList.innerHTML += `<div class="user-item" name="${user}" style="background: ${userColorMap[user]};">${user}</div>`;
         });
     });
 
     // Server-to-client: A user has disconnected from the room
     socket.on("user_disconnected", (data) => {
         users = data.users;
+        userColorMap = data.userColorMap;
 
         userList.innerHTML = "";
         users.forEach((user) => {
-            userList.innerHTML += `<div class="user-item" id="${user}">${user}</div>`;
+            userList.innerHTML += `<div class="user-item" name="${user}">${user}</div>`;
         });
+        
 
         chatBox.innerHTML += `
         <div class="chat-item">
@@ -78,8 +82,9 @@
 
     // Server-to-client: receive and display incoming messages
     socket.on("message", (data) => {
+        console.log(userColorMap[data.name])
         chatBox.innerHTML += `
-        <div class="chat-item">
+        <div class="chat-item" name="${data.name}" style="background: ${userColorMap[data.name]};">
             <span class="chat-username">${data.name}:</span> ${data.message}
         </div>`;
 
@@ -92,9 +97,10 @@
 
     // Server-to-client: receive message history on join
     socket.on("message_history", (data) => {
+        console.log("in message history event");
         data.messages.forEach((msg) => {
             chatBox.innerHTML += `
-            <div class="chat-item">
+            <div class="chat-item" name="${msg.name}" style="background: ${userColorMap[msg.name]};}">
                 <span class="chat-username">${msg.name}:</span> ${msg.message}
             </div>`;
 
@@ -102,7 +108,19 @@
                 chatBox.removeChild(chatBox.firstChild)
             }
         });
+
         chatBox.scrollTop = chatBox.scrollHeight;
+    });
+
+    // Color change sent by a user
+    socket.on("color_change", (data) => {
+        const name = data.name;
+        userColorMap[name] = data.color;
+
+        const userItems = document.getElementsByName(name);
+        for (const child of userItems){
+            child.style.background = data.color;
+        }
     });
 
     input.addEventListener("keydown", (event) => {
@@ -120,6 +138,11 @@
 
         socket.emit("message", {data: message});
         input.value = "";
+    }
+
+    const sendColor = (btn) => {
+        const color = btn.dataset.color;
+        socket.emit("color_change", {"name": username, "color": color})
     }
 
     //for the customize button popup
