@@ -112,4 +112,6 @@ def color_change(data):
     emit("color_change", {"name": name, "color": color}, to=room)
 
 if __name__ == "__main__":
-    socketio.run(app, debug=True)
+    import os
+    port = int(os.environ.get("PORT", 10000))
+    socketio.run(app, allow_unsafe_werkzeug=True, host="0.0.0.0", port=port)
