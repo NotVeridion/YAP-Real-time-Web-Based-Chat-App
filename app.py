@@ -112,4 +112,4 @@ def color_change(data):
     emit("color_change", {"name": name, "color": color}, to=room)
 
 if __name__ == "__main__":
-    socketio.run(app, debug=True)
+    socketio.run(app, allow_unsafe_werkzeug=True)
