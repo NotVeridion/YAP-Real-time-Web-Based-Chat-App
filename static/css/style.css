@@ -6,7 +6,6 @@
 
 /* styling and center for the page*/
 body {
-    font-family: Arial, sans-serif;
     background-color: #f3f3f3;
     min-height: 100vh;
     display: flex;
