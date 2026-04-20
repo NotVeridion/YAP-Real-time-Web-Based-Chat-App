@@ -22,41 +22,6 @@ document.querySelector(".homeForm").addEventListener("submit", function(e) {
     const name = document.querySelector('input[name="name"]').value.trim();
     const code = document.querySelector('input[name="code"]').value.trim().toUpperCase();
     const error = document.getElementById("error-message");
-
-    error.textContent = "";
-
-    if (!name) {
-        e.preventDefault();
-        error.textContent = "Please enter a username.";
-        return;
-    }
-
-    if (name.length > 15) {
-        e.preventDefault();
-        error.textContent = "Username must be 15 characters or less.";
-        return;
-    }
-
-    if (!/^[a-zA-Z0-9 _-]+$/.test(name)) {
-    e.preventDefault();
-    error.textContent = "Username must be letters, numbers, spaces, underscores, or dashes only.";
-    return;
-}
-
-    const clickedButton = e.submitter;
-
-    if (clickedButton && clickedButton.name === "join") {
-        if (!code) {
-            e.preventDefault();
-            error.textContent = "Please enter a room code to join.";
-            return;
-        }
-        if (!/^[A-Z]{4}$/.test(code)) {
-            e.preventDefault();
-            error.textContent = "Room code must be exactly 4 capital letters.";
-            return;
-        }
-    }
 });
 </script>
 {% endblock %}

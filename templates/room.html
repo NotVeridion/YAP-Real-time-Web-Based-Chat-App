@@ -54,7 +54,6 @@
 
         users = data.users;
         userColorMap = data.userColorMap;
-        userColorMap[data.name] = "#6ca8ff";
         
         userList.innerHTML = "";
         users.forEach((user) => {
@@ -69,7 +68,7 @@
 
         userList.innerHTML = "";
         users.forEach((user) => {
-            userList.innerHTML += `<div class="user-item" name="${user}">${user}</div>`;
+            userList.innerHTML += `<div class="user-item" name="${user}" style="background: ${userColorMap[user]};">${user}</div>`;
         });
 
         chatBox.innerHTML += `
