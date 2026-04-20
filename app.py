@@ -39,6 +39,8 @@ def home():
                 return render_template("home.html", error="Room code must be exactly 4 capital letters.", code=code, name=name)
             if code not in rooms:
                 return render_template("home.html", error="Room not found.", code=code, name=name)
+            if code in rooms and name in rooms[code]["users"]:
+                return render_template("home.html", error="Username already taken in this room. Please choose another.", code=code, name=name)
 
         if "create" in request.form:
             if code:
