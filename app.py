@@ -2,6 +2,7 @@ from flask import Flask, request, render_template, redirect, url_for, session
 from flask_socketio import SocketIO, join_room, leave_room, send, emit
 import random
 import string
+import re
 
 CHATBOX_MESSAGE_LIMIT = 25 # Message limit for chat box messages. If threshold is met, pops oldest message off.
 
@@ -19,24 +20,32 @@ def generate_room_code(length=4):
 
 @app.route("/", methods=["POST", "GET"])
 def home():
-    # A little bit done early to route to room.html for testing front-end
-    # feel free to change but leave some way to enter room.html ty -matthew
     if request.method == "POST":
-        name = request.form.get("name")
-        code = request.form.get("code")
+        name = request.form.get("name", "").strip()
+        code = request.form.get("code", "").strip().upper()
 
+        # Username validation
         if not name:
             return render_template("home.html", error="Please enter a username.", code=code, name=name)
+        if len(name) > 15:
+            return render_template("home.html", error="Username must be 15 characters or less.", code=code, name=name)
+        if not re.match(r'^[a-zA-Z0-9 _-]+$', name):
+            return render_template("home.html", error="Username must be letters, numbers, spaces, underscores, or dashes only.", code=code, name=name)
 
         if "join" in request.form:
             if not code:
                 return render_template("home.html", error="Please enter a room code.", code=code, name=name)
+            if not re.match(r'^[A-Z]{4}$', code):
+                return render_template("home.html", error="Room code must be exactly 4 capital letters.", code=code, name=name)
             if code not in rooms:
                 return render_template("home.html", error="Room not found.", code=code, name=name)
 
         if "create" in request.form:
-            if code and code in rooms:
-                return render_template("home.html", error=f"Room code '{code}' is already taken. Choose a new one.", code=code, name=name)
+            if code:
+                if not re.match(r'^[A-Z]{4}$', code):
+                    return render_template("home.html", error="Room code must be exactly 4 capital letters.", code=code, name=name)
+                if code in rooms:
+                    return render_template("home.html", error=f"Room code '{code}' is already taken. Choose a new one.", code=code, name=name)
             if not code:
                 code = generate_room_code()
             rooms[code] = {"users": [], "members": 0, "messages": [], "userColorMap": {}}
@@ -68,10 +77,8 @@ def on_connect():
     rooms[room]["members"] += 1
     rooms[room]["users"].append(name)
     rooms[room]["userColorMap"][name] = "#6ca8ff"
-    # Broadcast new user connection and send message history to the new user
-    # Had to change to emit rather than send to differentiate between normal messages and onConnect messages
-    emit("user_connected", {"name": name, "users": rooms[room]["users"], "userColorMap": rooms[room]["userColorMap"]}, to=room) # Broadcasts with event
-    emit("message_history", {"messages": rooms[room]["messages"]}) # Sends only to new client
+    emit("user_connected", {"name": name, "users": rooms[room]["users"], "userColorMap": rooms[room]["userColorMap"]}, to=room)
+    emit("message_history", {"messages": rooms[room]["messages"]})
 
 @socketio.on("disconnect")
 def on_disconnect():
@@ -85,7 +92,7 @@ def on_disconnect():
         rooms[room]["members"] -= 1
         if rooms[room]["members"] <= 0:
             del rooms[room]
-            return  # FIX: room deleted, stop here to avoid crash on emit below
+            return
     emit("user_disconnected", {"name": name, "users": rooms[room]["users"], "userColorMap": rooms[room]["userColorMap"]}, to=room)
 
 @socketio.on("message")
@@ -96,19 +103,16 @@ def on_message(data):
         return
     content = {"name": name, "message": data["data"]}
     if (len(rooms[room]["messages"]) >= CHATBOX_MESSAGE_LIMIT):
-        rooms[room]["messages"].pop(0)  # FIX: pop(0) removes oldest, not newest
-
+        rooms[room]["messages"].pop(0)
     rooms[room]["messages"].append(content)
-    send(content, to=room)  # FIX: send to all including self; room.html handles display for sender
+    send(content, to=room)
 
 @socketio.on("color_change")
 def color_change(data):
     room = session.get("room")
-
     name = data["name"]
     color = data["color"]
     rooms[room]["userColorMap"][name] = color
-
     emit("color_change", {"name": name, "color": color}, to=room)
 
 if __name__ == "__main__":
