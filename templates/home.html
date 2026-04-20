@@ -6,42 +6,56 @@
     <p id="error-message" class="error-message"></p>
     <div class="inputGroup">
         <label class="inputLabel">Username:</label>
-        <input class="inputText" type="text" placeholder="Enter username: " name="name" value="{{name}}"/>
+        <input class="inputText" type="text" placeholder="Enter username: " name="name" value="{{name}}" maxlength="15"/>
     </div>
 
     <div class="inputGroup">
         <label class="inputLabel">Room Code:</label>
-        <input class="inputText" type="text" placeholder="Enter room code" name="code" value="{{code}}"/>
+        <input class="inputText" type="text" placeholder="Enter room code" name="code" value="{{code}}" maxlength="4" oninput="this.value = this.value.replace(/[^A-Z]/g, '').toUpperCase()"/>
         <button class="buttonJoin" type="submit" name="join">Join a Room</button>
     </div>
     <button class="buttonCreate" type="submit" name="create">Create a Room</button>
 </form>
 
 <script>
-    // for the error message
 document.querySelector(".homeForm").addEventListener("submit", function(e) {
     const name = document.querySelector('input[name="name"]').value.trim();
-    const code = document.querySelector('input[name="code"]').value.trim();
+    const code = document.querySelector('input[name="code"]').value.trim().toUpperCase();
     const error = document.getElementById("error-message");
 
-    // clear previous error
     error.textContent = "";
 
-    //no name
     if (!name) {
         e.preventDefault();
-        error.textContent = "Please enter a username";
+        error.textContent = "Please enter a username.";
         return;
     }
 
+    if (name.length > 15) {
+        e.preventDefault();
+        error.textContent = "Username must be 15 characters or less.";
+        return;
+    }
+
+    if (!/^[a-zA-Z0-9 _-]+$/.test(name)) {
+    e.preventDefault();
+    error.textContent = "Username must be letters, numbers, spaces, underscores, or dashes only.";
+    return;
+}
+
     const clickedButton = e.submitter;
 
-    // FIX: removed hardcoded "ABCD" check — server handles room validation
-    // only block client-side if joining with no code at all
-    if (clickedButton && clickedButton.name === "join" && !code) {
-        e.preventDefault();
-        error.textContent = "Please enter a room code";
-        return;
+    if (clickedButton && clickedButton.name === "join") {
+        if (!code) {
+            e.preventDefault();
+            error.textContent = "Please enter a room code to join.";
+            return;
+        }
+        if (!/^[A-Z]{4}$/.test(code)) {
+            e.preventDefault();
+            error.textContent = "Room code must be exactly 4 capital letters.";
+            return;
+        }
     }
 });
 </script>
