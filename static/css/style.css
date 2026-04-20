@@ -23,6 +23,7 @@ body {
 
 /* main block section*/
 .homeForm {
+    position: relative;
     background-color: #d3d3d3;
     width: 360px;
     padding: 40px 30px;
@@ -32,18 +33,18 @@ body {
     gap: 20px;
 }
 
+.homeLogo {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    top: -150px;
+}
+
 /* text input */
 .inputGroup {
     display: flex;
     flex-direction: column;
     gap: 8px;
-}
-
-/* replace with image of yap logo */
-.homeLogo {
-    text-align: center;
-    font-size: 28px;
-    margin-bottom: 10px;
 }
 
 .room-page-flexbox{
