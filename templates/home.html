@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <form method="post" class="homeForm">
-    <h3 class="homeLogo">YAP LOGO</h3>
+    <img src="{{url_for('static', filename='assets/images/YAP-logo-1148x970.webp')}}" class="homeLogo"></img>
     {% if error %}<p class="error-message">{{ error }}</p>{% endif %}
     <p id="error-message" class="error-message"></p>
     <div class="inputGroup">
