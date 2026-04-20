@@ -3,14 +3,19 @@
     <head>
         <meta charset="UTF-8">
         <title>Yap</title>
+        <link rel="icon" type="image/x-icon" href="{{url_for('static', filename='assets/images/YAP-favicon.ico')}}">
         <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}"/>
+        <link rel="stylesheet" href="{{url_for('static', filename='css/fonts.css')}}"/>
         <script 
             src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" 
             integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" 
             crossorigin="anonymous"
         ></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
     </head>
-    <body>
+    <body class="ibm-plex-mono-regular">
         <div class="content">{% block content %} {% endblock %}</div>
     </body>
 </html>
