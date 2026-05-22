@@ -21,6 +21,10 @@ body {
     padding: 20px;
 }
 
+.codeFormatMessage{
+    font-size: 14px;
+}
+
 .homeForm {
     position: relative;
     background-color: #d3d3d3;
@@ -255,7 +259,7 @@ body {
     cursor: pointer;
     background-color: #39ff14;
     color: #222;
-    margin-top: 18px;
+    margin-top: 6px;
 }
 
 /* panel sizing */

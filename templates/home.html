@@ -8,13 +8,13 @@
         <label class="inputLabel">Username:</label>
         <input class="inputText" type="text" placeholder="Enter username: " name="name" value="{{name}}" maxlength="15"/>
     </div>
-
     <div class="inputGroup">
         <label class="inputLabel">Room Code:</label>
-        <input class="inputText" type="text" placeholder="Enter room code" name="code" value="{{code}}" maxlength="4" oninput="this.value = this.value.replace(/[^A-Z]/g, '').toUpperCase()"/>
-        <button class="buttonJoin" type="submit" name="join">Join a Room</button>
+        <input class="inputText" type="text" placeholder="Enter room code" name="code" value="{{code}}"/>
     </div>
+    <div class="codeFormatMessage"> Room code must be 4 capital letters</div>
     <button class="buttonCreate" type="submit" name="create">Create a Room</button>
+    <button class="buttonJoin" type="submit" name="join">Join a Room</button>
 </form>
 
 <script>
